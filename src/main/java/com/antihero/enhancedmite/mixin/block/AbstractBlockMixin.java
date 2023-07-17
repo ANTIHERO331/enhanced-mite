@@ -11,7 +11,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -61,13 +64,45 @@ public abstract class AbstractBlockMixin {
         private void constructor(BlockView world, BlockPos pos, CallbackInfoReturnable<Float> cir) {
             float blockHardness;
 
-            if (isIn(BlockTags.REPLACEABLE_PLANTS)) blockHardness = 0.02f;
+            if (isIn(BlockTags.REPLACEABLE_PLANTS) || isIn(BlockTags.SAPLINGS)) blockHardness = 0.02f;
+            else if (isOf(SUGAR_CANE)) blockHardness = 0.08f;
+
             else if (isOf(DIRT)) blockHardness = 0.5f;
             else if (isOf(GRASS_BLOCK)) blockHardness = 0.6f;
-            else if (isOf(DIRT_PATH)) blockHardness = 0.6f;
+            else if (isOf(PODZOL)) blockHardness = 0.6f;
+            else if (isOf(COARSE_DIRT)) blockHardness = 0.6f;
+            else if (isOf(MYCELIUM)) blockHardness = 0.6f;
+            else if (isOf(ROOTED_DIRT)) blockHardness = 0.6f;
+            else if (isOf(DIRT_PATH)) blockHardness = 0.7f;
             else if (isOf(GRAVEL)) blockHardness = 0.6f;
-            else if (isOf(SAND)) blockHardness = 0.4f;
-            else if (isOf(SUGAR_CANE)) blockHardness = 0.08f;
+            else if (isOf(MOSS_BLOCK)) blockHardness = 0.1f;
+            else if (isOf(SPONGE)) blockHardness = 0.6f;
+            else if (isOf(WET_SPONGE)) blockHardness = 0.6f;
+            else if (isOf(GLASS_PANE)) blockHardness = 0.1f;
+            else if (isOf(DISPENSER)) blockHardness = 3.5f;
+            else if (isOf(SANDSTONE)) blockHardness = 0.8f;
+            else if (isOf(CHISELED_SANDSTONE)) blockHardness = 0.8f;
+            else if (isOf(CUT_SANDSTONE)) blockHardness = 0.8f;
+            else if (isOf(NOTE_BLOCK)) blockHardness = 0.8f;
+            else if (isOf(POWERED_RAIL) || isOf(DETECTOR_RAIL)) blockHardness = 0.7f;
+            else if (isOf(STICKY_PISTON) || isOf(PISTON) || isOf(PISTON_HEAD)) blockHardness = 0.5f;
+            else if (isOf(COBWEB)) blockHardness = 0.1f;
+            else if (isOf(BRICKS)) blockHardness = 2.0f;
+            else if (isOf(TNT)) blockHardness = 1.0f;
+            else if (isOf(BOOKSHELF)) blockHardness = 1.5f;
+            else if (isOf(MOSSY_COBBLESTONE)) blockHardness = 2.0f;
+            else if (isOf(SPAWNER)) blockHardness = 3.0f;
+            else if (isOf(FARMLAND)) blockHardness = 0.6f;
+            else if (isOf(RAIL)) blockHardness = 0.7f;
+            else if (isOf(COBBLESTONE_STAIRS)) blockHardness = 2.0f;
+            else if (isOf(LEVER)) blockHardness = 0.5f;
+            else if (isOf(IRON_DOOR)) blockHardness = 4.0f;
+            else if (isOf(SNOW)) blockHardness = 0.05f;
+            else if (isOf(ICE)) blockHardness = 1.0f;
+            else if (isOf(SNOW_BLOCK)) blockHardness = 0.4f;
+            else if (isOf(CACTUS)) blockHardness = 0.4f;
+            else if (isOf(CLAY)) blockHardness = 0.8f;
+            else if (isOf(JUKEBOX)) blockHardness = 2.0f;
 
             else if (isOf(STONE)
                     || isOf(GRANITE)
@@ -119,7 +154,7 @@ public abstract class AbstractBlockMixin {
             else if (isOf(DEEPSLATE_ADAMANTIUM_ORE)) blockHardness = 6.0f;
             else if (isOf(TUFF)) blockHardness = 1.5f;
             else if (isOf(ANCIENT_DEBRIS)) blockHardness = 3.0f;
-            else if (isOf(CRYING_OBSIDIAN) || isOf(OBSIDIAN)) blockHardness = 2.4f;
+            else if (isOf(OBSIDIAN) || isOf(CRYING_OBSIDIAN)) blockHardness = 2.4f;
 
             else if (isOf(LAPIS_BLOCK)) blockHardness = 3.0f;
             else if (isOf(GOLD_BLOCK)) blockHardness = 4.8f;
@@ -137,14 +172,23 @@ public abstract class AbstractBlockMixin {
 
             else if (isOf(IRON_DOOR)) blockHardness = 4.0f;
 
+            else if (isIn(BlockTags.BUTTONS)) blockHardness = 0.5f;
             else if (isIn(BlockTags.WOOL)) blockHardness = 0.8f;
             else if (isIn(BlockTags.PLANKS)) blockHardness = 0.8f;
             else if (isIn(BlockTags.LOGS)) blockHardness = 1.2f;
+            else if (isIn(BlockTags.LEAVES)) blockHardness = 0.2f;
             else if (isIn(BlockTags.ICE)) blockHardness = 1.0f;
             else if (isIn(BlockTags.WOODEN_DOORS)) blockHardness = 0.25f;
+            else if (isIn(BlockTags.SAND)) blockHardness = 0.4f;
+            else if (isIn(BlockTags.BEDS)) blockHardness = 0.2f;
+            else if (isIn(BlockTags.WOODEN_STAIRS)) blockHardness = 0.8f;
+            else if (isIn(BlockTags.WOODEN_SLABS)) blockHardness = 0.4f;
+            else if (isIn(BlockTags.CROPS)) blockHardness = 0.02f;
+            else if (isIn(BlockTags.PRESSURE_PLATES)) blockHardness = 0.5f;
 
-            else if (getBlock() instanceof AbstractGlassBlock) blockHardness = 2.0f;
+            else if (getBlock() instanceof StainedGlassBlock || getBlock() instanceof GlassBlock) blockHardness = 2.0f;
             else if (getBlock() instanceof StainedGlassPaneBlock) blockHardness = 0.1f;
+            // cls_111: RunestoneBlock
             else if (getBlock() instanceof cls_111) blockHardness = 2.4f;
 
             // Portable block below
