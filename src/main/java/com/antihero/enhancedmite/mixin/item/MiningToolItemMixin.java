@@ -2,6 +2,7 @@ package com.antihero.enhancedmite.mixin.item;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.cls_10;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.*;
@@ -45,6 +46,9 @@ public abstract class MiningToolItemMixin extends ToolItem {
      */
     @Overwrite
     public float getMiningSpeedMultiplier(ItemStack stack, @NotNull BlockState state) {
+        if (this.asItem() instanceof cls_10) {
+            return state.isIn(this.effectiveBlocks) ? this.miningSpeed / 2 : 1.0f;
+        }
         return state.isIn(this.effectiveBlocks) ? this.miningSpeed : 1.0f;
     }
 
