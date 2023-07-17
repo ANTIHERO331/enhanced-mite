@@ -44,6 +44,13 @@
 		"chipped_adamantium_anvil",
 		"damaged_adamantium_anvil",
 		"enchanting_table",
-		"emerald_enchanting_table"
+		"emerald_enchanting_table",
+		"dispenser",
+		"note_block",
+		"#minecraft:beds",
+		"tnt",
+		"#minecraft:signs",
+		"ladder",
+		"jukebox"
 	]
 }
