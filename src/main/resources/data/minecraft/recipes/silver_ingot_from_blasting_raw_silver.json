@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:blasting",
+  "group": "silver_ingot",
+  "ingredient": {
+    "item": "minecraft:raw_silver"
+  },
+  "result": "minecraft:silver_ingot",
+  "experience": 10.0,
+  "cookingtime": 100,
+  "HeatLevel": 2,
+  "MaxCraftingCount": 1,
+  "InputCount": 1
+}

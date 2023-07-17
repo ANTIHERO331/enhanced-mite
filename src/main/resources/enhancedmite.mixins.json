@@ -1,0 +1,30 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.antihero.enhancedmite.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "block.AbstractBlockMixin",
+    "block.AbstractBlockMixin$AbstractBlockStateMixin",
+    "block.BlockMixin",
+    "entity.ai.goal.MeleeAttackGoalMixin",
+    "entity.mob.ZombieEntityMixin",
+    "entity.player.PlayerEntityMixin",
+    "item.ArmorItemMixin",
+    "item.AxeItemMixin",
+    "item.BlockItemMixin",
+    "item.ItemMixin",
+    "item.MiningToolItemMixin",
+    "item.ShovelItemMixin",
+    "item.SwordItemMixin",
+    "world.gen.feature.BonusChestFeatureMixin"
+  ],
+  "client": [
+    "client.MinecraftClientMixin",
+    "client.gui.hud.InGameHudMixin",
+    "client.network.ClientPlayerInteractionManagerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
