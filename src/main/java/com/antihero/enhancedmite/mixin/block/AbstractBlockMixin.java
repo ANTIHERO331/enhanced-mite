@@ -61,7 +61,7 @@ public abstract class AbstractBlockMixin {
         @Shadow public abstract Block getBlock();
 
         @Inject(method = "getHardness", at = @At(value = "HEAD"), cancellable = true)
-        private void constructor(BlockView world, BlockPos pos, CallbackInfoReturnable<Float> cir) {
+        private void setHardness(BlockView world, BlockPos pos, CallbackInfoReturnable<Float> cir) {
             float blockHardness;
 
             if (isIn(BlockTags.REPLACEABLE_PLANTS) || isIn(BlockTags.SAPLINGS)) blockHardness = 0.02f;
@@ -103,6 +103,17 @@ public abstract class AbstractBlockMixin {
             else if (isOf(CACTUS)) blockHardness = 0.4f;
             else if (isOf(CLAY)) blockHardness = 0.8f;
             else if (isOf(JUKEBOX)) blockHardness = 2.0f;
+            else if (isOf(PUMPKIN)) blockHardness = 0.6f;
+            else if (isOf(NETHERRACK)) blockHardness = 1.6f;
+            else if (isOf(SOUL_SAND)) blockHardness = 0.5f;
+            else if (isOf(SOUL_SOIL)) blockHardness = 0.5f;
+            else if (isOf(BASALT)) blockHardness = 2.4f;
+            else if (isOf(POLISHED_BASALT)) blockHardness = 2.4f;
+            else if (isOf(GLOWSTONE)) blockHardness = 0.3f;
+            else if (isOf(CARVED_PUMPKIN)) blockHardness = 0.6f;
+            else if (isOf(JACK_O_LANTERN)) blockHardness = 1.0f;
+            else if (isOf(CAKE)) blockHardness = 0.5f;
+            else if (isOf(SMITHING_TABLE)) blockHardness = 1.0f;
 
             else if (isOf(STONE)
                     || isOf(GRANITE)
@@ -185,11 +196,14 @@ public abstract class AbstractBlockMixin {
             else if (isIn(BlockTags.WOODEN_SLABS)) blockHardness = 0.4f;
             else if (isIn(BlockTags.CROPS)) blockHardness = 0.02f;
             else if (isIn(BlockTags.PRESSURE_PLATES)) blockHardness = 0.5f;
+            else if (isIn(BlockTags.WOODEN_FENCES)) blockHardness = 0.4f;
+            else if (isIn(BlockTags.WOODEN_TRAPDOORS)) blockHardness = 0.8f;
 
             else if (getBlock() instanceof StainedGlassBlock || getBlock() instanceof GlassBlock) blockHardness = 2.0f;
             else if (getBlock() instanceof StainedGlassPaneBlock) blockHardness = 0.1f;
             // cls_111: RunestoneBlock
             else if (getBlock() instanceof cls_111) blockHardness = 2.4f;
+            else if (getBlock() instanceof InfestedBlock) blockHardness = 0.75f;
 
             // Portable block below
             else if (isOf(BLAST_FURNACE)) blockHardness = 2.0f;

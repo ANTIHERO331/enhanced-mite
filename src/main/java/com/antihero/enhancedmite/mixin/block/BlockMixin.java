@@ -26,8 +26,8 @@ public abstract class BlockMixin extends AbstractBlock {
         super(settings);
     }
 
-    @Inject(method = "onSteppedOn", at = @At(value = "HEAD"))
-    private void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity, CallbackInfo ci) {
+    @Inject(method = "onLandedUpon", at = @At(value = "HEAD"))
+    private void onSteppedOn(World world, BlockState state, BlockPos pos, Entity entity, float fallDistance, CallbackInfo ci) {
         if (this.asBlock() instanceof FallingBlock block) {
             world.createAndScheduleBlockTick(pos, block, 2);
         }
