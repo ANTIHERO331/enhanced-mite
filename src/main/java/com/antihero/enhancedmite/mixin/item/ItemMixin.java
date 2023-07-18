@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,6 +20,8 @@ public abstract class ItemMixin implements ItemConvertible {
     @Shadow public abstract ItemStack getDefaultStack();
 
     @Shadow @Final private int maxDamage;
+
+    @Shadow public abstract int getMaxDamage();
 
     @Inject(method = "finishUsing", at = @At(value = "HEAD"))
     private void onFinishUsing(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
@@ -37,5 +40,11 @@ public abstract class ItemMixin implements ItemConvertible {
         else maxToolDamage = maxDamage;
 
         cir.setReturnValue(maxToolDamage);
+    }
+
+    @Inject(method = "getItemBarColor", at = @At(value = "HEAD"), cancellable = true)
+    private void getItemBarColor(ItemStack stack, CallbackInfoReturnable<Integer> cir) {
+        float f = Math.max(0.0f, ((float)this.getMaxDamage() - (float)stack.getDamage()) / (float)this.getMaxDamage());
+        cir.setReturnValue(MathHelper.hsvToRgb(f / 3.0f, 1.0f, 1.0f));
     }
 }
