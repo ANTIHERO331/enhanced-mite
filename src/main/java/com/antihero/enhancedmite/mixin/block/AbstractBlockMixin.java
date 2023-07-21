@@ -29,15 +29,14 @@ public abstract class AbstractBlockMixin {
     private void calcBlockBreakingDelta(BlockState state, PlayerEntity player, BlockView world, BlockPos pos, CallbackInfoReturnable<Float> cir) {
         HungerManager manager = player.getHungerManager();
         float hardness = state.getHardness(world, pos);
-        float breakingSpeed = state.isIn(EnhancedMITE.POTABLE) ? 1 : player.getBlockBreakingSpeed(state);
-        if (state.isIn(EnhancedMITE.POTABLE)) hardness /= 160.0f;
-
         if (!player.canHarvest(state))
             cir.setReturnValue(0.0f);
         else if (manager.getFoodLevel() <= 0 && manager.getSaturationLevel() <= 0)
-            cir.setReturnValue(breakingSpeed / hardness / 2000.0f);
+            cir.setReturnValue(player.getBlockBreakingSpeed(state) / hardness / 2000.0f);
+        else if (state.isIn(EnhancedMITE.PORTABLE))
+            cir.setReturnValue(player.getBlockBreakingSpeed(state) / (hardness / 40) / 600.0f);
         else
-            cir.setReturnValue(breakingSpeed / hardness / 600.0f);
+            cir.setReturnValue(player.getBlockBreakingSpeed(state) / hardness / 600.0f);
     }
 
     @Inject(method = "onBlockAdded", at = @At(value = "HEAD"))

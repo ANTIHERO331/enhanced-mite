@@ -43,7 +43,7 @@ public abstract class ZombieEntityMixin extends HostileEntity {
         this.goalSelector.add(6, new MoveThroughVillageGoal(this, 1.0, true, 4, this::canBreakDoors));
         this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.0));
         this.targetSelector.add(1, new RevengeGoal(this).setGroupRevenge(ZombifiedPiglinEntity.class));
-        this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, 0, false, false, Entity::isAttackable));
+        this.targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, 0, true, false, Entity::isAttackable));
         this.targetSelector.add(3, new ActiveTargetGoal<>(this, MerchantEntity.class, false));
         this.targetSelector.add(3, new ActiveTargetGoal<>(this, IronGolemEntity.class, true));
         this.targetSelector.add(4, new ActiveTargetGoal<>(this, AnimalEntity.class, true, animal -> !(animal instanceof HostileEntity)));
@@ -54,7 +54,7 @@ public abstract class ZombieEntityMixin extends HostileEntity {
     private static void createZombieAttributes(CallbackInfoReturnable<DefaultAttributeContainer.Builder> cir) {
         cir.setReturnValue(HostileEntity.createHostileAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 20.0)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 64.0)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 40.0)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.23f)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5.0)
                 .add(EntityAttributes.GENERIC_ARMOR, 5.0)

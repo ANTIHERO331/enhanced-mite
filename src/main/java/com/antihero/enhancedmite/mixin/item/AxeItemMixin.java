@@ -8,7 +8,6 @@ import net.minecraft.tag.TagKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(value = {AxeItem.class})
 public abstract class AxeItemMixin extends MiningToolItem {

@@ -14,10 +14,11 @@ import org.slf4j.LoggerFactory;
 
 public class EnhancedMITE implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger("Enhanced MITE");
+	public static final String SUITABLE_VERSION = "0.6.4";
 
 	public static final Item RAW_SILVER = new Item(new Item.Settings().group(ItemGroup.MATERIALS));
 
-	public static final TagKey<Block> POTABLE = TagKey.of(Registry.BLOCK_KEY, new Identifier("minecraft", "portable"));
+	public static final TagKey<Block> PORTABLE = TagKey.of(Registry.BLOCK_KEY, new Identifier("minecraft", "portable"));
 	public static final Item NETHERITE_DAGGER = new cls_32(128000, ToolMaterials.NETHERITE, 4.0f, -1.5f, new Item.Settings().group(ItemGroup.COMBAT));
 	public static final Item NETHERITE_BATTLE_AXE = new cls_42(ToolMaterials.NETHERITE, 512000, 4, -2.8f, new Item.Settings().group(ItemGroup.COMBAT));
 	public static final Item NETHERITE_WAR_HAMMER = new cls_239(640000, ToolMaterials.NETHERITE, 4, -2.8f, new Item.Settings().group(ItemGroup.COMBAT));;

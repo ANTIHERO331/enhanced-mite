@@ -1,6 +1,5 @@
 package com.antihero.enhancedmite.mixin.entity.player;
 
-import com.antihero.enhancedmite.util.SharedUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.cls_125;
 import net.minecraft.entity.EntityType;
@@ -18,7 +17,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static com.antihero.enhancedmite.util.SharedUtils.eatingCooldown;
 
