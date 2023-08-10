@@ -4,6 +4,73 @@
 
 一个被设计为修复 MITE 1.18.2 的 bug 以及细节问题，并尝试改善 MITE 1.18.2 游玩体验的模组。
 
+### v0.6 中的更改
+
+* 作者重构了工作环境，并迅速删除了绝大部分Mixin类中由`@Overwrite`注解的注入方法，取而代之的是其他注入方式。这一改变带来的结果是更高的兼容性，但可能在与部分模组共存时，某些此模组或共存模组的更改失效。
+另外，即使大部分`@Overwrite`注入方式被删除，但仍存少量此注解。其可能造成模组之间的不和谐，所以后文有简单的说明以便避坑。
+* 使用不对应的工具挖掘方块时不再会损耗工具的耐久
+* 现在饥饿的玩家再不能入睡
+* 任何工具现在无法加速挖掘功能性方块。已证实：有些本该能空手采集的方块实际上不能空手采集，是因为构造这些方块时未调用`Settings.portable()`。
+* 空手不能再采集竹子
+* 再次加强了僵尸的AI
+* 当床周围的保护足够时，玩家可以忽略其他的睡眠条件入睡（除饥饿、怪物偷家等）
+* 修复更新MITE依赖版本后，护甲值错误的问题
+* 调整了月亮的大小
+* 玩家现在无法拾取在某些条件下的物品——包括但不限于着火、隔着某些不完整方块、看不见它们等
+* 添加打火石烧肉这一特性以与1.6.4同步。注：此特性稍微冷门，因此在后文做简单介绍。
+* 更改了玩家使用方块的行为，现在需要在正确的侧面上使用才能激活GUI
+* 篝火的默认状态现在是熄灭的
+* 更改了篝火物品的材质
+* 玩家现在可以通过沙砾获取铁粒，几率为1/162
+* 纠正了下界合金块的合成时间，现在需12.8675分钟以完成合成
+* 修复了各金属块错误的挖掘等级
+* 修复了各粗矿块错误的合成配方
+* 修复了各工作台错误的合成配方类型
+* 修复了此模组的一个离谱bug：僵尸的触及距离受玩家的影响
+* 重绘了附加资源包`enhancedmite_textures`中燧石工具的材质
+* 加长了白天时间以与1.6.4同步。原白天时间为12000t（一天为24000t），现白天时间为14000t，与原相比增长了2000t（相应地，夜晚时间减少了2000t，所以一天仍为24000t）。同时，日出、日落时间也相应地改动，现在在一天中，日出会在0t（原为0t，未变）时发生；而日落会在14000t（原为12000t）时发生。
+
+#### 附1：可能不兼容的模组所包含的更改
+
+ - 修改了`AbstractBlock$Settings$hardness(float)`。
+ - 修改了`ActiveTargetGoal$findClosestTarget()`。
+ - 修改了`LandPathNodeMaker$getSuccessors([PathNode;PathNode;)`。
+ - 修改了`PathNodeNavigatorMixin$findPathToAny(Profiler;PathNode;Map;float;int;float)`。
+ - 修改了`ZombifiedPiglinEntity$initCustomGoals()`。
+ - 修改了`BlockItem$place(ItemPlacementContext;BlockState;)`。
+ - 修改了`SwordItem$getMiningSpeedMultiplier(ItemStack;BlockState;)`。
+
+#### 附2：使用打火石烹饪生肉
+
+特性实现自MITE 1.6.4，其核心代码如下。
+
+        if (!isFood() || !getFoodComponent().isMeat() || enhancedmite$isCookedMeat(itemEntity.getStack()) || !itemEntity.isOnFire()) return;
+        enhancedmite$foodCookingTicks--;
+        if (itemEntity.world.getBlockState(itemEntity.getBlockPos()).isOf(Blocks.FIRE)
+                && itemEntity.world.random.nextInt(159) == 0)
+            itemEntity.world.setBlockState(itemEntity.getBlockPos(), Blocks.AIR.getDefaultState());
+        if (enhancedmite$foodCookingTicks <= 0) {
+            World world = itemEntity.world;
+            Vec3d itemEntityPos = itemEntity.getPos();
+            ItemStack stack = itemEntity.getStack();
+            int stackCount = stack.getCount();
+            Optional<SmeltingRecipe> recipe = world.getRecipeManager().getFirstMatch(RecipeType.SMELTING, new SimpleInventory(stack), world);
+            float cookingExperience = recipe.map(AbstractCookingRecipe::getExperience).orElse(0.0f);
+            if (recipe.isPresent()) {
+                itemEntity.discard();
+                Item result = recipe.get().getOutput().getItem();
+                ItemEntity resultEntity;
+                world.spawnEntity(new ExperienceOrbEntity(world, itemEntityPos.getX(), itemEntityPos.getY(), itemEntityPos.getZ(), (int) cookingExperience * stackCount));
+                world.spawnEntity(resultEntity = new ItemEntity(world, itemEntityPos.getX(), itemEntityPos.getY(), itemEntityPos.getZ(), new ItemStack(result, stackCount)));
+                resultEntity.setVelocity(0, 0, 0);
+                enhancedmite$foodCookingTicks = recipe.map(AbstractCookingRecipe::getCookTime).orElse(200) * 2 + world.random.nextInt(200);
+            }
+        }
+
+ - 执行代码的条件，需要掉落物形式的物品满足食物、肉类、非熟肉、着火。所以，使用打火石生火之后，将生肉丢入火中便可触发其余代码。不要担心你的食物会化为灰烬——此情况已在另一个类中避免。
+ - 字段 enhancedmite$foodCookingTicks 的值落在区间 [400, 600)。这意味着必须使满足条件的物品着火20秒至30秒才能得到熟肉。
+ - 使用此烧炼方式有如下优点：可以批量烧炼，对堆叠了16块肉的处理与仅1块肉的处理是一样的；可以不连续烧炼，即不必时时关注掉落物的着火状态。
+
 ### v0.5.1 中的次要更改
 
 * 修复此模组在使用金属币时，如若背包无空位，则不会返还金属粒的问题；现在在以上情况中，返还的金属粒会被丢出 ~~别再怼着岩浆磕了~~
