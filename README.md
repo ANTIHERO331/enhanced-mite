@@ -4,6 +4,10 @@
 
 一个被设计为修复 MITE 1.18.2 的 bug 以及细节问题，并尝试改善 MITE 1.18.2 游玩体验的模组。
 
+### v0.6.1 中的兼容性更改
+
+* 水但又不是很水的更新：再一次提高了模组的兼容性，现在模组中仅存两个由`@Overwrite`注解的注入方法。它们分别为`LandPathNodeMaker$getSuccessors([PathNode;PathNode;)`和`PathNodeNavigatorMixin$findPathToAny(Profiler;PathNode;Map;float;int;float)`。
+
 ### v0.6 中的更改
 
 * 作者重构了工作环境，并迅速删除了绝大部分Mixin类中由`@Overwrite`注解的注入方法，取而代之的是其他注入方式。这一改变带来的结果是更高的兼容性，但可能在与部分模组共存时，某些此模组或共存模组的更改失效。
